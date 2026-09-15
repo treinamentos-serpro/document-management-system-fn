@@ -7,6 +7,7 @@ function errorHandler(error, req, res, next) {
     EMPTY_FILE: [400, 'EMPTY_FILE'],
     LIMIT_FILE_SIZE: [413, 'FILE_TOO_LARGE'],
     LIMIT_UNEXPECTED_FILE: [400, 'FILE_REQUIRED'],
+    INVALID_DOCUMENT_ID: [400, 'INVALID_DOCUMENT_ID'],
     DOCUMENT_NOT_FOUND: [404, 'DOCUMENT_NOT_FOUND'],
     FILE_NOT_FOUND: [404, 'FILE_NOT_FOUND'],
   };
@@ -16,6 +17,7 @@ function errorHandler(error, req, res, next) {
     INVALID_FILE_TYPE: 'O tipo do arquivo não é permitido.',
     EMPTY_FILE: 'O arquivo não pode estar vazio.',
     FILE_TOO_LARGE: 'O arquivo excede o tamanho máximo permitido.',
+    INVALID_DOCUMENT_ID: 'O identificador do documento é inválido.',
     DOCUMENT_NOT_FOUND: 'Documento não encontrado.',
     FILE_NOT_FOUND: 'Arquivo não encontrado.',
     INTERNAL_ERROR: 'Ocorreu um erro interno.',

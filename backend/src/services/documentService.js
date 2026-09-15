@@ -15,7 +15,7 @@ class DocumentService {
     }
 
     if (!file.size) {
-      this.fileRepository.remove(file.filename).catch(() => {});
+      this.removeFileAfterFailure(file.filename);
       const error = new Error('File cannot be empty');
       error.code = 'EMPTY_FILE';
       throw error;
@@ -40,8 +40,14 @@ class DocumentService {
   }
 
   cleanupFailedCreation(storedName, error) {
-    this.fileRepository.remove(storedName).catch(() => {});
+    this.removeFileAfterFailure(storedName);
     throw error;
+  }
+
+  removeFileAfterFailure(storedName) {
+    this.fileRepository.remove(storedName).catch((cleanupError) => {
+      console.error('Falha ao remover arquivo após erro no upload.', cleanupError);
+    });
   }
 
   listDocuments() {
@@ -49,6 +55,12 @@ class DocumentService {
   }
 
   getDownload(id) {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+      const error = new Error('Invalid document id');
+      error.code = 'INVALID_DOCUMENT_ID';
+      throw error;
+    }
+
     const document = this.metadataRepository.findById(id);
     if (!document || document.owner !== this.ownerId) {
       const error = new Error('Document not found');
